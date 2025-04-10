@@ -2,8 +2,12 @@ import React, {useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { Searchbar, Button } from 'react-native-paper';
 import styles from './Styles';
+import { useNavigation } from '@react-navigation/native'; 
 
 const SearchPage = () => {
+
+  const navigation = useNavigation(); 
+  
   const [input, setInput] = useState('');
   const [books, setBooks] = useState([]); 
   const [loading, setLoading] = useState(false);

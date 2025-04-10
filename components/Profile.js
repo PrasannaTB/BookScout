@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import { FIREBASE_AUTH } from './firebaseConfig';
+import Logout from './Logout';
 import styles from './Styles';
 
 const Profile = () => {
   return (
     <View style={styles.container}>
-      <Button onPress={() => FIREBASE_AUTH.signOut()} title="Logout"/>
+      <Text style = {{marginTop: 50}}>Welcome to your Profile!</Text>
+      <Logout />
     </View>
   );
 };
