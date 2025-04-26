@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, TouchableHighlight, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity , ActivityIndicator } from 'react-native';
 import { Searchbar, Button } from 'react-native-paper';
 import styles from './Styles';
 import { useNavigation } from '@react-navigation/native'; 
@@ -21,30 +21,30 @@ const SearchPage = () => {
     setLoading(true);
     setHasSearched(true);
     fetch(`https://www.googleapis.com/books/v1/volumes?q=${input}&maxResults=40&key=AIzaSyAALkmVbjolFbHPR73GbA6GC0mPqEf1x14`)
-    .then(response => {
-      if(!response.ok)
-        throw new Error("Error: " + response.statusText);
+      .then(response => {
+        if(!response.ok)
+          throw new Error("Error: " + response.statusText);
 
-        return response.json();
-    })
-    .then(data => {
-      setBooks(data.items || []);
-      setInput('');
-      setLoading(false)
-    })
-    .catch(err => console.error(err))
+          return response.json();
+      })
+      .then(data => {
+        setBooks(data.items || []);
+        setInput('');
+        setLoading(false)
+      })
+      .catch(err => console.error(err))
   };
 
   const renderBookItem = ({ item }) => (
-    <TouchableHighlight onPress={() => navigation.navigate('BookDetails', { link: item.selfLink })}>
+    <TouchableOpacity onPress={() => navigation.navigate('BookDetails', { link: item.selfLink })}>
       <View style = {styles.bookContainer}>
         <View>  
           <Image
             //source = {{ uri: item.volumeInfo.imageLinks.thumbnail }}
-            source={item.volumeInfo.imageLinks === undefined ? require('../assets/noImage.jpg') : { uri: item.volumeInfo.imageLinks.thumbnail }}
+            source={item.volumeInfo.imageLinks === undefined ? require('../assets/noImage.png') : { uri: item.volumeInfo.imageLinks.thumbnail }}
             resizeMode='cover'
             style={styles.bookImage}
-            defaultSource={require('../assets/noImage.jpg')}
+            defaultSource={require('../assets/noImage.png')}
           />
           <Text style={styles.title}>{item.volumeInfo.title}</Text>
           <Text style={styles.author}>
@@ -53,7 +53,7 @@ const SearchPage = () => {
           
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 
   const renderNoResults = () => (
@@ -63,7 +63,7 @@ const SearchPage = () => {
         <Text style={{fontSize: 15}}>Try searching with different keywords!</Text>
         <View>
           <Image
-            source={require('../assets/searchLogo.jpg')}
+            source={require('../assets/searchLogo.png')}
             style={{ width: 200, height: 200 }}
           />
         </View>

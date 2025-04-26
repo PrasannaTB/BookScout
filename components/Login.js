@@ -35,7 +35,7 @@ const Login = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log("Signed in:", response.user.email);
       alert('Signed in successfully!');
-      navigation.replace('Home');
+      //navigation.replace('HomeTabNavigator'); 
     } catch (error) {
       console.error(error);
       alert('Sign in failed: ' + (error.message || 'Unknown error'));

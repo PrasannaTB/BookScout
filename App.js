@@ -8,9 +8,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { ref, push, onValue } from "firebase/database";
 import { FIREBASE_AUTH } from './components/firebaseConfig';
 import Login from './components/Login';
-import Home from './components/Home';
+import HomePage from './components/Home';
 import SearchPage from './components/Search';
 import Profile from './components/Profile';
+import GenreLibrary from './components/GenreLibrary';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const Stack = createNativeStackNavigator();
@@ -27,7 +28,7 @@ const HomeTabNavigator = () => {
     >
       <Tab.Screen
         name="Home"
-        component={Home} 
+        component={HomePage} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color={color} size={size} />
@@ -71,10 +72,22 @@ export default function App() {
       <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="Login">
         {user ? (
-          <Stack.Screen 
-            name="HomeTabNavigator" 
-            component={HomeTabNavigator} 
-            options={{ headerShown: false }}/>
+          <>
+            <Stack.Screen 
+              name="HomeTabNavigator" 
+              component={HomeTabNavigator} 
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen 
+              name="GenreLibrary" 
+              component={GenreLibrary} 
+              options={({ route }) => ({ 
+                title: `Explore ${route.params.genre} reads`,
+                headerBackTitle: 'Back',
+              })}
+           />
+          </>
+    
         ) : ( 
           <Stack.Screen name="Login" component={Login} />
         )}

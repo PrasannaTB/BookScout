@@ -55,7 +55,42 @@ const styles = StyleSheet.create({
   searchButton: {
     height: 40, // Match the height of Searchbar
     justifyContent: 'center',
-  }
+  },
+  list: {
+    justifyContent: 'center',
+  },
+
+  itemContainer: {
+    alignItems: 'center',
+    margin: 20,
+    width: 90,
+  },
+
+  label: {
+    marginTop: 10,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 20,
+    color: '#444',
+    marginTop: 50,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+
+  genreTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    color: '#333'
+  }, 
+  
   
 
 
