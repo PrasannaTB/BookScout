@@ -90,6 +90,53 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     color: '#333'
   }, 
+
+  scrollViewContent: {
+    flex: 1,  
+    padding: 20,
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+
+  bookImageDetail: {
+    width: 200,
+    height: 300,
+    borderRadius: 10,
+    marginBottom: 20,
+    marginLeft: 85
+  },
+
+  detailsTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 2,
+     // color: '#333333',
+  },
+
+  detailsAuthor: {
+    fontSize: 15,
+    textAlign: 'center',
+    marginBottom: 25,
+  },
+
+  descriptionHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+
+  },
+
+  description: {
+    fontSize: 15,
+    marginBottom: 20,
+  },
+
+  info: {
+    fontSize: 16,
+
+  },
+  
   
   
 

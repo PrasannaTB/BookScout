@@ -12,6 +12,7 @@ import HomePage from './components/Home';
 import SearchPage from './components/Search';
 import Profile from './components/Profile';
 import GenreLibrary from './components/GenreLibrary';
+import BookDetails from './components/BookDetails';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const Stack = createNativeStackNavigator();
@@ -83,6 +84,13 @@ export default function App() {
               component={GenreLibrary} 
               options={({ route }) => ({ 
                 title: `Explore ${route.params.genre} reads`,
+                headerBackTitle: 'Back',
+              })}
+           />
+           <Stack.Screen 
+              name="BookDetails" 
+              component={BookDetails} 
+              options={({ route }) => ({ 
                 headerBackTitle: 'Back',
               })}
            />
