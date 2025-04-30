@@ -9,13 +9,38 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 
-  bookContainer: {
-    flexDirection: 'row',
+  input: {
+    marginVertical: 4,
+    height: 50,
+    width: '90%',
+    borderWidth: 1,
+    borderRadius: 4,
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-        //marginRight: 120
+    backgroundColor: '#fff',
+    marginBottom: 15,
   },
+
+  bookContainer: {
+    padding: 15,
+    marginBottom: 15,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    elevation: 3,
+    flexDirection: 'column', // Make sure items are stacked vertically
+    justifyContent: 'flex-start', // Align items to start
+  },
+  
+  pickerContainer: {
+    marginLeft: 65,
+    flexDirection: 'column', // Stack Picker vertically
+    justifyContent: 'center', // Center the Picker
+  },
+  
+  picker: {
+    width: '80%', // Full width of the container
+    height: 80, // Set the height for the picker
+  },
+  
 
 	bookImage: {
 		width: 130,
@@ -117,7 +142,6 @@ const styles = StyleSheet.create({
   detailsAuthor: {
     fontSize: 15,
     textAlign: 'center',
-    marginBottom: 25,
   },
 
   descriptionHeader: {
@@ -136,6 +160,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
 
   },
+
+  bookshelfContainer: {
+    alignItems: 'center',
+    margin: 20,
+    width: 130,
+  },
+
+
   
   
   

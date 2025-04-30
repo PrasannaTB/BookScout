@@ -14,6 +14,7 @@ import {
 import { FIREBASE_AUTH } from './firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import styles from './Styles';
 
 
 const Login = () => {
@@ -107,18 +108,3 @@ const Login = () => {
 
 export default Login;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    marginHorizontal: 20,
-  },
-  input: {
-    marginVertical: 4,
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: '#fff'
-  }
-});

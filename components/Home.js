@@ -14,13 +14,13 @@ const HomePage = () => {
     { genre: 'Biography' },
     { genre: 'Fantasy' },
     { genre: 'Fiction' },
+    { genre: 'History'},
     { genre: 'Horror' },
     { genre: 'Poetry' },
     { genre: 'Romance' },
     { genre: 'Science Fiction' },
     { genre: 'Self Help' },
     { genre: 'Thriller' },
-    { genre: 'Young Adult' },
     
   ];
 

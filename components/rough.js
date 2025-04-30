@@ -1,86 +1,146 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, TouchableHighlight, ActivityIndicator } from 'react-native';
-import { Searchbar, Button } from 'react-native-paper';
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
 import styles from './Styles';
-import { useNavigation } from '@react-navigation/native'; 
+import { REALTIME_DB } from './firebaseConfig';
+import { useSelector } from 'react-redux';
 
-const RoughPage = () => {
+const BookshelfDetail = ({ route, navigation }) => {
+  const { books, shelfName } = route.params; // Expect shelfName to be passed too
+  const user = useSelector((state) => state.userInfo);
 
-  const navigation = useNavigation(); 
-  
-  const [books, setBooks] = useState([]); 
-  const [loading, setLoading] = useState(false);
+  const [bookList, setBookList] = useState(books);
 
-  const fetchBooks = async () => {
+  const removeBookFromShelf = (bookToRemove) => {
+    if (!user || !shelfName) return;
 
-    setLoading(true);
-    
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=bestseller&orderBy=relevance&maxResults=10&key=AIzaSyAALkmVbjolFbHPR73GbA6GC0mPqEf1x14`)
-    .then(response => {
-      if(!response.ok)
-        throw new Error("Error: " + response.statusText);
+    const updatedBooks = bookList.filter((b) => b.id !== bookToRemove.id);
 
-        return response.json();
+    setBookList(updatedBooks);
+
+    const bookshelfRef = REALTIME_DB.ref(`users/${user.uid}/bookshelves`);
+
+    // Update the specific bookshelf by shelfName
+    bookshelfRef.update({
+      [shelfName]: updatedBooks,
     })
-    .then(data => {
-      setBooks(data.items || []);
-      setLoading(false)
-    })
-    .catch(err => console.error(err))
+      .then(() => {
+        console.log('Book removed successfully');
+      })
+      .catch((err) => {
+        console.error('Error removing book:', err);
+        Alert.alert('Error', 'Failed to remove the book.');
+      });
   };
 
-  useEffect(() => {
-    fetchBooks();
-  }, []);
+  const renderItem = ({ item }) => (
+    <View style={styles.bookItem}>
+      <Image
+        source={item.imageLinks ? { uri: item.imageLinks.thumbnail } : require('../assets/noImage.png')}
+        style={styles.bookImage}
+      />
+      <Text style={styles.bookTitle}>{item.title}</Text>
+      <Text style={styles.bookAuthor}>{item.authors?.join(', ') || 'Unknown Author'}</Text>
 
-  const renderBookItem = ({ item }) => (
-    <TouchableHighlight onPress={() => navigation.navigate('BookDetails', { link: item.selfLink })}>
-      <View style = {styles.bookContainer}>
-        <View>  
-          <Image
-            //source = {{ uri: item.volumeInfo.imageLinks.thumbnail }}
-            source={item.volumeInfo.imageLinks === undefined ? require('../assets/noImage.jpg') : { uri: item.volumeInfo.imageLinks.thumbnail }}
-            resizeMode='cover'
-            style={styles.bookImage}
-            defaultSource={require('../assets/noImage.jpg')}
-          />
-          <Text style={styles.title}>{item.volumeInfo.title}</Text>
-          <Text style={styles.author}>
-            by {item.volumeInfo.authors === undefined ? 'Unknown' : item.volumeInfo.authors.join(' & ')}
-          </Text>
-          
-        </View>
-      </View>
-    </TouchableHighlight>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => removeBookFromShelf(item)}
+      >
+        <Text style={styles.removeText}>Remove</Text>
+      </TouchableOpacity>
+    </View>
   );
 
-  const separator = () => (
-    <View style={styles.separator} />
+  return (
+    <View style={styles.container}>
+      {bookList.length > 0 && (
+        <Text style={styles.shelfTitle}>Books in this Shelf</Text>
+      )}
+      {bookList.length > 0 ? (
+        <FlatList
+          data={bookList}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+      ) : (
+        <Text>No books in this shelf.</Text>
+      )}
+    </View>
   );
-
-  if (loading) {
-    return(
-      <View style = {styles.container}>
-        <ActivityIndicator size = "large" />
-      </View>
-    );
-  }
-  else {
-    return (
-      <>
-        <View style={styles.container}>
-          <FlatList
-            data = {books}
-            renderItem={renderBookItem}
-            keyExtractor={item => item.id}
-            ItemSeparatorComponent={separator}
-          />
-        </View>
-      </>
-    );
-  }
 };
 
-export default RoughPage;
+export default BookshelfDetail;
 
 
+/*
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
+import styles from './Styles';
+import { REALTIME_DB } from './firebaseConfig';
+import { useSelector } from 'react-redux';
+
+const BookshelfDetail = ({ route, navigation }) => {
+  const { books, shelfName } = route.params; // Expect shelfName to be passed too
+  const user = useSelector((state) => state.userInfo);
+
+  const [bookList, setBookList] = useState(books);
+
+  const removeBookFromShelf = (bookToRemove) => {
+    if (!user || !shelfName) return;
+
+    const updatedBooks = bookList.filter((b) => b.id !== bookToRemove.id);
+
+    setBookList(updatedBooks);
+
+    const bookshelfRef = REALTIME_DB.ref(`users/${user.uid}/bookshelves`);
+
+    // Update the specific bookshelf by shelfName
+    bookshelfRef.update({
+      [shelfName]: updatedBooks,
+    })
+      .then(() => {
+        console.log('Book removed successfully');
+      })
+      .catch((err) => {
+        console.error('Error removing book:', err);
+        Alert.alert('Error', 'Failed to remove the book.');
+      });
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.bookItem}>
+      <Image
+        source={item.imageLinks ? { uri: item.imageLinks.thumbnail } : require('../assets/noImage.png')}
+        style={styles.bookImage}
+      />
+      <Text style={styles.bookTitle}>{item.title}</Text>
+      <Text style={styles.bookAuthor}>{item.authors?.join(', ') || 'Unknown Author'}</Text>
+
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => removeBookFromShelf(item)}
+      >
+        <Text style={styles.removeText}>Remove</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {bookList.length > 0 && (
+        <Text style={styles.shelfTitle}>Books in this Shelf</Text>
+      )}
+      {bookList.length > 0 ? (
+        <FlatList
+          data={bookList}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+      ) : (
+        <Text>No books in this shelf.</Text>
+      )}
+    </View>
+  );
+};
+
+export default BookshelfDetail;
+*/

@@ -9,12 +9,12 @@ const images = {
   thriller: require('../assets/thriller.png'),
   fantasy: require('../assets/fantasy.png'),
   selfhelp: require('../assets/selfhelp.png'),
-  youngadult: require('../assets/youngadult.png'),
   biography: require('../assets/biography.png'),
   sciencefiction: require('../assets/sciencefiction.png'),
   horror: require('../assets/horror.png'),
   poetry: require('../assets/poetry.png'),
   adventure: require('../assets/adventure.png'),
+  history: require('../assets/history.png'),
 };
 
 const avatars = {};

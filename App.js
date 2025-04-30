@@ -14,6 +14,10 @@ import Profile from './components/Profile';
 import GenreLibrary from './components/GenreLibrary';
 import BookDetails from './components/BookDetails';
 import { onAuthStateChanged } from 'firebase/auth';
+import { Provider } from 'react-redux';
+import { userStore } from './components/AccountReducer';
+import BookshelfDetail from './components/BookshelfDetail';
+import BookshelfScreen from './components/Bookshelf';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,38 +73,55 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Stack.Navigator initialRouteName="Login">
-        {user ? (
-          <>
-            <Stack.Screen 
-              name="HomeTabNavigator" 
-              component={HomeTabNavigator} 
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-              name="GenreLibrary" 
-              component={GenreLibrary} 
-              options={({ route }) => ({ 
-                title: `Explore ${route.params.genre} reads`,
-                headerBackTitle: 'Back',
-              })}
-           />
-           <Stack.Screen 
-              name="BookDetails" 
-              component={BookDetails} 
-              options={({ route }) => ({ 
-                headerBackTitle: 'Back',
-              })}
-           />
-          </>
-    
-        ) : ( 
-          <Stack.Screen name="Login" component={Login} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={userStore}>
+      <NavigationContainer>
+        <StatusBar style="auto" />
+        <Stack.Navigator initialRouteName="Login">
+          {user ? (
+            <>
+              <Stack.Screen 
+                name="HomeTabNavigator" 
+                component={HomeTabNavigator} 
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen 
+                name="GenreLibrary" 
+                component={GenreLibrary} 
+                options={({ route }) => ({ 
+                  title: `Explore ${route.params.genre} reads`,
+                  headerBackTitle: 'Back',
+                })}
+              />
+              <Stack.Screen 
+                  name="BookDetails" 
+                  component={BookDetails} 
+                  options={({ route }) => ({ 
+                    headerBackTitle: 'Back',
+                  })}
+              />
+              <Stack.Screen 
+                  name="Bookshelf" 
+                  component={BookshelfScreen} 
+                  options={({ route }) => ({ 
+                    headerBackTitle: 'Back',
+                  })}
+              />
+              <Stack.Screen
+                name="BookshelfDetail"
+                component={BookshelfDetail}
+                options={({ route }) => ({
+                  title: route.params.shelfName ? route.params.shelfName.replace(/([A-Z])/g, ' $1').toUpperCase() : 'Bookshelf',
+                  headerBackTitle: 'Back',
+                })}
+              />
+            </>
+      
+          ) : ( 
+            <Stack.Screen name="Login" component={Login} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
