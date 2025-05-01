@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
 import styles from './Styles';
 import { REALTIME_DB } from './firebaseConfig';
@@ -8,10 +8,17 @@ const BookshelfDetail = ({ route, navigation }) => {
   const { books, shelfName } = route.params; // Expect shelfName to be passed too
   const user = useSelector((state) => state.userInfo);
 
-  const [bookList, setBookList] = useState(books);
+  const [bookList, setBookList] = useState([]);
+
+  // Effect to handle the books passed from the BookshelfScreen
+  useEffect(() => {
+    // Convert the books object into an array of book objects
+    const booksArray = Object.values(books);
+    console.log('Books converted to array:', booksArray);
+    setBookList(booksArray);
+  }, [books]);
 
   const removeBookFromShelf = (bookToRemove) => {
-    console.log('User Info:', user);
     if (!user || !shelfName) return;
 
     const updatedBooks = bookList.filter((b) => b.id !== bookToRemove.id);
@@ -36,11 +43,11 @@ const BookshelfDetail = ({ route, navigation }) => {
   const renderItem = ({ item }) => (
     <View style={styles.bookItem}>
       <Image
-        source={item.imageLinks ? { uri: item.imageLinks.thumbnail } : require('../assets/noImage.png')}
+        source={item.volumeInfo.imageLinks ? { uri: item.volumeInfo.imageLinks.thumbnail } : require('../assets/noImage.png')}
         style={styles.bookImage}
       />
-      <Text style={styles.bookTitle}>{item.title}</Text>
-      <Text style={styles.bookAuthor}>{item.authors?.join(', ') || 'Unknown Author'}</Text>
+      <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
+      <Text style={styles.bookAuthor}>{item.volumeInfo.authors?.join(', ') || 'Unknown Author'}</Text>
 
       <TouchableOpacity
         style={styles.removeButton}
