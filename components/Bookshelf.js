@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 const BookshelfScreen = ({ navigation }) => {
   const user = useSelector((state) => state.userInfo);
+  console.log('User Info:', user);
 
   const [bookshelves, setBookshelves] = useState({
     alreadyRead: [],
