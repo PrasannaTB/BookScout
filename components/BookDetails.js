@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ActivityIndicator, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, ActivityIndicator, ScrollView, Alert, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import styles from './Styles';
-import { ref, remove, set, onValue } from 'firebase/database';
+import { ref, set, onValue } from 'firebase/database';
 import { REALTIME_DB } from './firebaseConfig';
 
 const BookDetails = () => {
@@ -27,6 +27,7 @@ const BookDetails = () => {
         setBookDetails(data);
       } catch (err) {
         console.error('Error:', err);
+        Alert.alert('Error', 'Failed to load book details');
       } finally {
         setLoading(false);
       }
@@ -36,6 +37,8 @@ const BookDetails = () => {
   }, [link]);
 
   useEffect(() => {
+    console.log('User Info:', user);
+
     if (user?.uid && bookDetails?.id && !initialCheckDone) {
       const bookshelvesRef = ref(REALTIME_DB, `users/${user.uid}/bookshelves`);
       onValue(bookshelvesRef, (snapshot) => {
@@ -54,35 +57,43 @@ const BookDetails = () => {
     }
   }, [user, bookDetails, initialCheckDone]);
 
-  const handleShelfChange = async (newShelf) => {
-    if (!user?.uid || !bookDetails) return;
-  
+  const handleAddToShelf = async () => {
+    if (!user?.uid) {
+      console.log('Missing user UID');
+      Alert.alert('Error', 'User not logged in');
+      return;
+    }
+
+    if (!bookDetails) {
+      console.log('Missing book details');
+      Alert.alert('Error', 'Book details not available');
+      return;
+    }
+
+    if (!selectedShelf) {
+      console.log('Missing selected shelf');
+      Alert.alert('Error', 'Please select a bookshelf');
+      return;
+    }
+
     const bookData = {
       id: bookDetails.id,
       volumeInfo: bookDetails.volumeInfo,
     };
-  
-    const shelves = ['alreadyRead', 'currentlyReading', 'wantToRead'];
-  
+
+    console.log('Adding book to shelf:', selectedShelf, bookData);
+
     try {
-      // Remove from all shelves first
-      await Promise.all(
-        shelves.map((shelf) =>
-          remove(ref(REALTIME_DB, `users/${user.uid}/bookshelves/${shelf}/${bookData.id}`))
-        )
-      );
-  
-      // Then add to the selected shelf
+      // Add the book to the selected shelf
       await set(
-        ref(REALTIME_DB, `users/${user.uid}/bookshelves/${newShelf}/${bookData.id}`),
+        ref(REALTIME_DB, `users/${user.uid}/bookshelves/${selectedShelf}/${bookData.id}`),
         bookData
       );
-  
-      setSelectedShelf(newShelf);
-      Alert.alert('Success', `Book moved to ${newShelf}`);
+      Alert.alert('Success', `Book added to ${selectedShelf}`);
+      console.log('Book successfully added to shelf');
     } catch (err) {
       console.error('Firebase update error:', err);
-      Alert.alert('Error', 'Failed to update bookshelf.');
+      Alert.alert('Error', 'Failed to add book to bookshelf.');
     }
   };
 
@@ -117,8 +128,8 @@ const BookDetails = () => {
           <Picker
             selectedValue={selectedShelf}
             onValueChange={(value) => {
+              console.log('Shelf selected:', value); // Log the selected shelf
               setSelectedShelf(value);
-              handleShelfChange(value);
             }}
             style={styles.picker}
           >
@@ -127,6 +138,8 @@ const BookDetails = () => {
             <Picker.Item label="Want to Read" value="wantToRead" />
           </Picker>
         </View>
+
+        <Button title="Add to Bookshelf" onPress={handleAddToShelf} />
 
         <Text style={styles.descriptionHeader}>Book Description</Text>
         <Text style={styles.description}>

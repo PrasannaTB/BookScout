@@ -14,11 +14,13 @@ import {
 import { FIREBASE_AUTH } from './firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from './AccountReducer'; // adjust path if necessary
 import styles from './Styles';
 
-
 const Login = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,8 +37,15 @@ const Login = () => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log("Signed in:", response.user.email);
+
+      // ✅ Dispatch user info to Redux
+      dispatch(setUserInfo({
+        uid: response.user.uid,
+        email: response.user.email,
+      }));
+
       alert('Signed in successfully!');
-      //navigation.replace('HomeTabNavigator'); 
+      // navigation.replace('HomeTabNavigator'); 
     } catch (error) {
       console.error(error);
       alert('Sign in failed: ' + (error.message || 'Unknown error'));
@@ -54,7 +63,6 @@ const Login = () => {
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       console.log("User created:", response.user.email);
-      //alert('Check your emails!')
       alert('Account created successfully!');
     } catch (error) {
       console.error(error);
@@ -107,4 +115,3 @@ const Login = () => {
 };
 
 export default Login;
-

@@ -11,6 +11,7 @@ const BookshelfDetail = ({ route, navigation }) => {
   const [bookList, setBookList] = useState(books);
 
   const removeBookFromShelf = (bookToRemove) => {
+    console.log('User Info:', user);
     if (!user || !shelfName) return;
 
     const updatedBooks = bookList.filter((b) => b.id !== bookToRemove.id);
