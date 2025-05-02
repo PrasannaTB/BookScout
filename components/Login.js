@@ -64,7 +64,10 @@ const Login = () => {
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       console.log("User created:", response.user.email);
-      alert('Account created successfully!');
+      await auth.signOut();
+      alert('Account created successfully! Please log in.');
+        setEmail('');
+        setPassword('');
     } catch (error) {
       console.error(error);
       alert('Sign up failed: ' + (error.message || 'Unknown error'));
