@@ -35,7 +35,7 @@ const HomePage = () => {
       >
         <View>
           {Avatar ? <Avatar size={100} /> : <View style={styles.placeholder} />}
-          <Text style={styles.label}>{item.genre}</Text>
+          <Text style={styles.genreName}>{item.genre}</Text>
         </View>
       </TouchableOpacity >
     )

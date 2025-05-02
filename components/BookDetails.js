@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ActivityIndicator, ScrollView, Alert, Button } from 'react-native';
+import { View, Text, Image, ActivityIndicator, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -109,7 +109,7 @@ const BookDetails = () => {
 
   return (
     <View style={styles.scrollViewContent}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={
             volumeInfo.imageLinks?.thumbnail
@@ -139,7 +139,9 @@ const BookDetails = () => {
           </Picker>
         </View>
 
-        <Button title="Add to Bookshelf" onPress={handleAddToShelf} />
+        <TouchableOpacity onPress={handleAddToShelf}>
+          <Text style={styles.addButton}>Add to Bookshelf</Text>
+        </TouchableOpacity>
 
         <Text style={styles.descriptionHeader}>Book Description</Text>
         <Text style={styles.description}>

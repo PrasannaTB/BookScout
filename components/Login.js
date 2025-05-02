@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import {
   View,
+  Text,
   TextInput,
-  StyleSheet,
   Button,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard
 } from 'react-native';
 
@@ -17,6 +18,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from './AccountReducer'; // adjust path if necessary
 import styles from './Styles';
+import { ImageBackground } from 'react-native';
+import { useFonts } from 'expo-font';
+
 
 const Login = () => {
   const navigation = useNavigation();
@@ -78,37 +82,57 @@ const Login = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <TextInput
-            value={email}
-            style={styles.input}
-            placeholder="Email"
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="email-address"
-            onChangeText={setEmail}
-          />
+        <ImageBackground 
+          source={require('../assets/background1.png')}
+          style={{ flex: 1 }}
+          resizeMode="cover"
+        >
+          <View style={styles.loginPage}>
+            <Text style={styles.welcome}>Welcome to</Text>
+            <Text style={styles.appName}>BOOK SCOUT</Text>
+            <TextInput
+              value={email}
+              style={styles.input}
+              placeholder="Email"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              onChangeText={setEmail}
+            />
 
-          <TextInput
-            value={password}
-            style={styles.input}
-            placeholder="Password"
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry
-            onChangeText={setPassword}
-          />
+            <TextInput
+              value={password}
+              style={styles.input}
+              placeholder="Password"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry
+              onChangeText={setPassword}
+            />
 
-          {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : (
-            <>
-              <Button title="Login" onPress={signIn} />
-              <View style={{ height: 10 }} />
-              <Button title="Create account" onPress={signUp} />
-            </>
-          )}
-        </View>
+            {loading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+              <>
+                <TouchableOpacity
+                style={styles.button}
+                onPress={signIn}
+                >
+                  <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+
+                <View style={{ height: 10 }} />
+
+                <TouchableOpacity
+                  onPress={signUp}
+                >
+                  <Text style={styles.buttonText}>Create account</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        
+        </ImageBackground>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );

@@ -2,33 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
 import styles from './Styles';
 import { REALTIME_DB } from './firebaseConfig';
+import { ref, update } from 'firebase/database';
 import { useSelector } from 'react-redux';
 
 const BookshelfDetail = ({ route, navigation }) => {
-  const { books, shelfName } = route.params; // Expect shelfName to be passed too
+  const { books, shelfName } = route.params || {};
   const user = useSelector((state) => state.userInfo);
 
   const [bookList, setBookList] = useState([]);
 
-  // Effect to handle the books passed from the BookshelfScreen
   useEffect(() => {
-    // Convert the books object into an array of book objects
-    const booksArray = Object.values(books);
-    console.log('Books converted to array:', booksArray);
-    setBookList(booksArray);
+    if (books && typeof books === 'object') {
+      const booksArray = Object.values(books);
+      setBookList(booksArray);
+    } else {
+      console.warn('BookshelfDetail: Invalid or missing books:', books);
+      setBookList([]);
+    }
   }, [books]);
 
   const removeBookFromShelf = (bookToRemove) => {
     if (!user || !shelfName) return;
 
     const updatedBooks = bookList.filter((b) => b.id !== bookToRemove.id);
-
     setBookList(updatedBooks);
 
-    const bookshelfRef = REALTIME_DB.ref(`users/${user.uid}/bookshelves`);
+    const bookshelfRef = ref(REALTIME_DB, `users/${user.uid}/bookshelves`);
 
-    // Update the specific bookshelf by shelfName
-    bookshelfRef.update({
+    update(bookshelfRef, {
       [shelfName]: updatedBooks,
     })
       .then(() => {
@@ -41,21 +42,27 @@ const BookshelfDetail = ({ route, navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <View style={styles.bookItem}>
-      <Image
-        source={item.volumeInfo.imageLinks ? { uri: item.volumeInfo.imageLinks.thumbnail } : require('../assets/noImage.png')}
-        style={styles.bookImage}
-      />
-      <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
-      <Text style={styles.bookAuthor}>{item.volumeInfo.authors?.join(', ') || 'Unknown Author'}</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('BookDetails', { link: item.selfLink })}>
+      <View style={styles.bookContainer}>
+        <Image
+          source={item.volumeInfo.imageLinks
+            ? { uri: item.volumeInfo.imageLinks.thumbnail }
+            : require('../assets/noImage.png')}
+          style={styles.bookImage}
+        />
+        <Text style={styles.title}>{item.volumeInfo.title}</Text>
+        <Text style={styles.author}>
+          {item.volumeInfo.authors?.join(', ') || 'Unknown Author'}
+        </Text>
 
-      <TouchableOpacity
-        style={styles.removeButton}
-        onPress={() => removeBookFromShelf(item)}
-      >
-        <Text style={styles.removeText}>Remove</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.removeButton}
+          onPress={() => removeBookFromShelf(item)}
+        >
+          <Text style={styles.removeText}>Remove</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -68,6 +75,7 @@ const BookshelfDetail = ({ route, navigation }) => {
           data={bookList}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <Text>No books in this shelf.</Text>

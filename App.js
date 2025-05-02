@@ -1,5 +1,6 @@
 import React, { useEffect, useState }from 'react';
 import { StatusBar } from 'expo-status-bar';
+import styles from './components/Styles';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -27,7 +28,8 @@ const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: 'rgb(116, 144, 147)', 
+        tabBarActiveTintColor: 'rgb(243, 114, 68)',      // Active icon color
+        tabBarInactiveTintColor: 'rgb(25, 65, 114)',
         headerShown: false, 
       }}
     >
@@ -88,22 +90,27 @@ export default function App() {
                 name="GenreLibrary" 
                 component={GenreLibrary} 
                 options={({ route }) => ({ 
-                  title: `Explore ${route.params.genre} reads`,
+                  title: `Explore ${route.params.genre} Reads`,
                   headerBackTitle: 'Back',
+                  headerTitleStyle: styles.genreHeader
                 })}
               />
               <Stack.Screen 
-                  name="BookDetails" 
-                  component={BookDetails} 
-                  options={({ route }) => ({ 
-                    headerBackTitle: 'Back',
-                  })}
+                name="BookDetails" 
+                component={BookDetails} 
+                options={{
+                  headerBackTitle: 'Back',
+                  headerTitle: 'Book Details', 
+                  headerTitleStyle: styles.bookHeader
+                }}
               />
               <Stack.Screen 
                   name="Bookshelf" 
                   component={BookshelfScreen} 
                   options={({ route }) => ({ 
                     headerBackTitle: 'Back',
+                    headerTitle: 'Your Bookshelves',
+                    headerTitleStyle: styles.bookHeader 
                   })}
               />
               <Stack.Screen
@@ -112,12 +119,18 @@ export default function App() {
                 options={({ route }) => ({
                   title: route.params.shelfName ? route.params.shelfName.replace(/([A-Z])/g, ' $1').toUpperCase() : 'Bookshelf',
                   headerBackTitle: 'Back',
+                  headerTitleStyle: styles.bookHeader 
                 })}
               />
             </>
       
           ) : ( 
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen 
+              name="Login" 
+              component={Login} 
+              options={{ headerShown: false }} 
+            />
+
           )}
         </Stack.Navigator>
       </NavigationContainer>
