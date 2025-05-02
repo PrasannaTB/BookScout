@@ -1,12 +1,11 @@
 import React, { useEffect, useState }from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styles from './components/Styles';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { ref, push, onValue } from "firebase/database";
+//import { ref, push, onValue } from "firebase/database";
 import { FIREBASE_AUTH } from './components/firebaseConfig';
 import Login from './components/Login';
 import HomePage from './components/Home';
@@ -28,7 +27,7 @@ const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: 'rgb(243, 114, 68)',      // Active icon color
+        tabBarActiveTintColor: 'rgb(243, 114, 68)',     
         tabBarInactiveTintColor: 'rgb(25, 65, 114)',
         headerShown: false, 
       }}

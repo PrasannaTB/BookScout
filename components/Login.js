@@ -16,11 +16,9 @@ import { FIREBASE_AUTH } from './firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from './AccountReducer'; // adjust path if necessary
+import { setUserInfo } from './AccountReducer'; 
 import styles from './Styles';
 import { ImageBackground } from 'react-native';
-import { useFonts } from 'expo-font';
-
 
 const Login = () => {
   const navigation = useNavigation();
@@ -42,7 +40,6 @@ const Login = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log("Signed in:", response.user.email);
 
-      // ✅ Dispatch user info to Redux
       dispatch(setUserInfo({
         uid: response.user.uid,
         email: response.user.email,

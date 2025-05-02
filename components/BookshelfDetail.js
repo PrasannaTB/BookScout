@@ -42,27 +42,26 @@ const BookshelfDetail = ({ route, navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('BookDetails', { link: item.selfLink })}>
-      <View style={styles.bookContainer}>
-        <Image
-          source={item.volumeInfo.imageLinks
-            ? { uri: item.volumeInfo.imageLinks.thumbnail }
-            : require('../assets/noImage.png')}
-          style={styles.bookImage}
-        />
-        <Text style={styles.title}>{item.volumeInfo.title}</Text>
-        <Text style={styles.author}>
-          {item.volumeInfo.authors?.join(', ') || 'Unknown Author'}
-        </Text>
+    <View style={styles.bookContainer}>
+      <Image
+        source={item.volumeInfo.imageLinks
+          ? { uri: item.volumeInfo.imageLinks.thumbnail }
+          : require('../assets/noImage.png')}
+        style={styles.bookImage}
+      />
+      <Text style={styles.title}>{item.volumeInfo.title}</Text>
+      <Text style={styles.author}>
+        {item.volumeInfo.authors?.join(', ') || 'Unknown Author'}
+      </Text>
 
-        <TouchableOpacity
-          style={styles.removeButton}
-          onPress={() => removeBookFromShelf(item)}
-        >
-          <Text style={styles.removeText}>Remove</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => removeBookFromShelf(item)}
+      >
+        <Text style={styles.removeText}>Remove</Text>
+      </TouchableOpacity>
+    </View>
+    
   );
 
   return (

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Avatar } from 'react-native-paper';
 
-
-// Local images
 const images = {
   fiction: require('../assets/fiction.png'),
   romance: require('../assets/romance.png'),

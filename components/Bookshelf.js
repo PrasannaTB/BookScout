@@ -13,9 +13,10 @@ const BookshelfScreen = ({ navigation }) => {
     currentlyReading: [],
     wantToRead: [],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (user?.uid) {
       const bookshelfRef = ref(REALTIME_DB, `users/${user.uid}/bookshelves`);
 
       const initializeBookshelves = () => {
@@ -34,6 +35,7 @@ const BookshelfScreen = ({ navigation }) => {
 
       get(bookshelfRef)
         .then((snapshot) => {
+          setLoading(false);
           if (!snapshot.exists()) {
             initializeBookshelves();
           } else {
@@ -48,32 +50,40 @@ const BookshelfScreen = ({ navigation }) => {
         })
         .catch((err) => {
           console.error('Error fetching bookshelf:', err);
+          setLoading(false);
           Alert.alert('Error', 'Failed to fetch bookshelves');
         });
+    } else {
+      setLoading(false);
+      Alert.alert('Error', 'User not authenticated');
     }
   }, [user]);
 
   return (
     <ScrollView>
       <View style={styles.bookshelfScreenContainer}>
-        {Object.keys(bookshelves).map((shelf) => (
-          <View style={styles.bookshelfCard} key={shelf}>
-            <TouchableNativeFeedback
-              onPress={() =>
-                navigation.navigate('BookshelfDetail', {
-                  books: bookshelves[shelf],
-                  shelfName: shelf,
-                })
-              }
-            >
-              <View style={styles.textButton}>
-                <Text style={styles.shelfTitle}>
-                  {shelf.replace(/([A-Z])/g, ' $1').toUpperCase()}
-                </Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-        ))}
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : (
+          Object.keys(bookshelves).map((shelf) => (
+            <View style={styles.bookshelfCard} key={shelf}>
+              <TouchableNativeFeedback
+                onPress={() =>
+                  navigation.navigate('BookshelfDetail', {
+                    books: bookshelves[shelf],
+                    shelfName: shelf,
+                  })
+                }
+              >
+                <View style={styles.textButton}>
+                  <Text style={styles.shelfTitle}>
+                    {shelf.replace(/([A-Z])/g, ' $1').toUpperCase()}
+                  </Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+          ))
+        )}
       </View>
     </ScrollView>
   );

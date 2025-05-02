@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     marginBottom: 5,
     marginTop: 10,
-    justifyContent: 'center', // Center vertically
+    justifyContent: 'center', 
     alignItems: 'center',  
   },
 
@@ -105,14 +105,13 @@ const styles = StyleSheet.create({
 		width: 140,
     height: 200,
     marginBottom: 13,
-    //borderRadius: 10,
   },
 
   addButton: {
     fontSize: 18, 
     color: 'white',
     textAlign: 'center',
-    justifyContent: 'center', // Center vertically
+    justifyContent: 'center', 
     alignItems: 'center',  
     backgroundColor: 'rgb(243, 114, 68)',
     width: '60%',
@@ -211,7 +210,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 10,
     paddingHorizontal: 15,
-    //color: 'rgb(25, 65, 114)',
     color: 'rgb(243, 114, 68)',
     fontFamily: 'serif',
   },
@@ -231,7 +229,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 65,  
+    marginLeft: 85,  
   },
 
   detailsTitle: {

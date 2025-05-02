@@ -1,4 +1,3 @@
-// userStore.js
 import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
 
 export const setUserInfo = createAction('user/set');

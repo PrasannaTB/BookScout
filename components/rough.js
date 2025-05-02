@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, TouchableNativeFeedback, View, Alert } from 'react-native';
 import styles from './Styles';
@@ -87,3 +88,4 @@ const BookshelfScreen = ({ navigation }) => {
 };
 
 export default BookshelfScreen;
+*/

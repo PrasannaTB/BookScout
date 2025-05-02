@@ -37,7 +37,6 @@ const BookDetails = () => {
   }, [link]);
 
   useEffect(() => {
-    console.log('User Info:', user);
 
     if (user?.uid && bookDetails?.id && !initialCheckDone) {
       const bookshelvesRef = ref(REALTIME_DB, `users/${user.uid}/bookshelves`);
@@ -128,7 +127,7 @@ const BookDetails = () => {
           <Picker
             selectedValue={selectedShelf}
             onValueChange={(value) => {
-              console.log('Shelf selected:', value); // Log the selected shelf
+              console.log('Shelf selected:', value); 
               setSelectedShelf(value);
             }}
             style={styles.picker}
